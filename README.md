@@ -7,12 +7,11 @@
         * Essential for dev: 
             * nodemon or other live reloading server (nodemon must be run through node scripts)
             * eslint for logging
-    * mongoDB created if needed 
-    * mongoDB connection configured correctly
-    * result: working package.json, single index file with 
+    * mongoDB created if needed connection string configured correctly for DB
+    * **TEST : All routes and corresponding reactions on the server and DB** 
 * Separating config + configuring environments
     * .env variables into seperate
-* Separate Router into module
+* Separate Router into "controller" module
     * use express.Router to export this module
 * Separate Mongoose or model data into separate module
 * Create utils modules
