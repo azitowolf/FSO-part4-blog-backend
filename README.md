@@ -22,4 +22,6 @@
     * final refactor step. 
     * Index.js just initiates express app, starts server on port
     * const app = require('./app') // the actual Express application
+    * const server = http.createServer(app)
+
  

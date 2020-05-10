@@ -1,20 +1,10 @@
 const http = require('http')
-const express = require('express')
-const app = express()
-const cors = require('cors')
-const mongoose = require('mongoose')
-require('dotenv').config()
-const blogsRouter = require('./controllers/blogs')
+const app = require('./app')
+const logger = require('./utils/logger')
+const config = require('./utils/config')
 
-const mongoUrl = process.env.MONGODB_URI
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+const server = http.createServer(app)
 
-app.use(cors())
-app.use(express.json())
-
-app.use(blogsRouter)
-
-const PORT = process.env.PORT
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+server.listen(config.PORT, () => {
+  logger.info(`Server running on port ${config.PORT}`)
 })

@@ -1,1 +1,1 @@
-http://localhost:3001/api/notes
+http://localhost:3003/api/blogs
