@@ -48,7 +48,7 @@ describe('favorite Post', () => {
     })
   })
 
-  test.only('when list has more than one blog return highest liked blog with proper format', () => {
+  test('when list has more than one blog return highest liked blog with proper format', () => {
     const result = listHelper.favoriteBlog(listWithManyBlogs)
     expect(result).toEqual({
       title: 'Canonical string reduction',

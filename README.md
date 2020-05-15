@@ -23,5 +23,14 @@
     * Index.js just initiates express app, starts server on port
     * const app = require('./app') // the actual Express application
     * const server = http.createServer(app)
-
+* Add Function Tests
+    * use jest (https://jestjs.io/docs/en/api.html)
+    * test.[filename].js
+    * install with NPM, add to eslint config as well as package.json scripts
+* Add API Tests
+    * Configure DB to connect to development version for testing
+        * Install 'cross-env' npm 
+        * Add new MONGODB_URI to config file
+        * Seed DB with data for testing
+        * Separate seeding, fake ID creation into seperate helper module
  
