@@ -1,11 +1,11 @@
 # Part 4
 
-a Structure of backend application, introduction to testing
-b Testing the backend
-c User administration
-d Token authentication
+a. Structure of backend application, introduction to testing
+b. Testing the backend
+c. User administration
+d. Token authentication
 
-## Parts a+ b : Refactoring a node.js application backend
+## Parts a + b : Refactoring a node.js application backend
 
 * Application running in a single file (little refactoring)
     * config package.json + add all npm modules required for app
@@ -51,3 +51,56 @@ d Token authentication
     ```javascript
     const users = await User.find({}).populate('notes', { content: 1, date: 1 })
     ```
+## Parts c + d : User Admin + Authentication
+
+Modules for these sections
+
+```javascript
+npm install bcrypt --save
+npm install jsonwebtoken --save
+npm install mongoose-unique-validator --save
+npm istall jest --save
+```
+
+### User Administration
+
+* |User| one --- many |Note|
+* Add this relationship in Mongoose Models 
+```javascript
+type: mongoose.Schema.Types.ObjectId,
+ref: 'Note'
+```
+* Populate function to add any additional info needed to user model (IE related posts, etc)
+* Adjust the users route to salt and hash the password on user create = const passwordHash = await bcrypt.hash(body.password, saltRounds)
+* Adjust resources so that they can be assigned to a user
+
+### Token Based Authentication
+
+Flow for token based auth is as follows:
+
+(https://scotch.io/tutorials/the-ins-and-outs-of-token-based-authentication#toc-how-token-based-works)
+User starts by logging in using a login form implemented with React
+This causes the React code to send the username and the password to the server address /api/login as a HTTP POST request.
+If the username and the password are correct, the server generates a token which somehow identifies the logged in user.
+The backend responds with a status code indicating the operation was successful, and returns the token with the response.
+The browser saves the token, for example to the state of a React application.
+When the user creates a new note (or does some other operation requiring identification), the React code sends the token to the server with the request.
+The server uses the token to identify the user
+
+* make login.js seperate controller file
+    * logic to find user, check if pw is correct, and return user and a token
+* edits to resources (blog posts, notes, etc.)
+    * logic to to get the token, decode it, find the user, and then make the note and assign ownership to that user 
+* edits to testing suite
+    * add authorization header
+    ```javascript
+    POST http://localhost:3001/api/notes
+    Content-Type: application/json
+    Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ ...
+
+    {
+        "content": "Beauty is in the eye of the beholder",
+        "important": false
+    }
+    ```
+* limit access to routes to authenticated users
