@@ -5,12 +5,12 @@ const jwt = require('jsonwebtoken')
 
 
 blogsRouter.get('/api/blogs', async (request, response) => {
-  const blogs = await Blog.find({}).populate( { path : 'author' }) // Add the user information to response
+  const blogs = await Blog.find({}).populate( { path : 'author' }) // Add the author information to response
   response.json(blogs.map(blog => blog.toJSON()))
 })
 
 // TODO should be auth token restricted
-blogsRouter.get('api/blogs/:id', async (request, response) => {
+blogsRouter.get('/:id', async (request, response) => {
   const blog = await Blog.findById(request.params.id)
   if (blog) {
     response.json(blog.toJSON())
@@ -19,7 +19,7 @@ blogsRouter.get('api/blogs/:id', async (request, response) => {
   }
 })
 
-blogsRouter.post('/api/blogs', async (request, response) => {
+blogsRouter.post('/', async (request, response) => {
   const body = request.body
 
   if (body.url === undefined || body.title === undefined) {
@@ -47,7 +47,7 @@ blogsRouter.post('/api/blogs', async (request, response) => {
   response.json(savedBlog.toJSON())
 })
 
-blogsRouter.delete('/api/blogs/:id', async (request, response) => {
+blogsRouter.delete('/:id', async (request, response) => {
 
   const token = request.token // will return NULL if none given or not proper format
   const decodedToken = jwt.verify(token, process.env.SECRET) // returns a user object { username: 'example', name: 'example' }
@@ -67,15 +67,7 @@ blogsRouter.delete('/api/blogs/:id', async (request, response) => {
 // TODO should be auth token restricted
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
-
-  const blog = new Blog({
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes || 0
-  })
-
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  const updatedBlog = await Blog.findByIdAndUpdate({ _id: request.params.id }, body, { new: true })
   response.json(updatedBlog.toJSON())
 })
 
